@@ -17,12 +17,14 @@ async function onPageLoad() {
 	try {
 		getTracks()
 			.then(tracks => {
+				console.log('getTracks',tracks);
 				const html = renderTrackCards(tracks)
 				renderAt('#tracks', html)
 			})
 
 		getRacers()
 			.then((racers) => {
+				console.log('getRacers', racers);
 				const html = renderRacerCars(racers)
 				renderAt('#racers', html)
 			})
@@ -182,7 +184,7 @@ function renderRacerCars(racers) {
 
 	return `
 		<ul id="racers">
-			${reuslts}
+			${results}
 		</ul>
 	`
 }
@@ -321,10 +323,21 @@ function defaultFetchOpts() {
 
 function getTracks() {
 	// GET request to `${SERVER}/api/tracks`
+	return fetch(`${SERVER}/api/tracks`, {
+		method: 'GET',
+		...defaultFetchOpts(),
+		dataType: 'jsonp',
+	}).then(res => res.json())
+
 }
 
 function getRacers() {
 	// GET request to `${SERVER}/api/cars`
+	return fetch(`${SERVER}/api/cars`, {
+		method: 'GET',
+		...defaultFetchOpts(),
+		dataType: 'jsonp',
+	}).then(res => res.json())
 }
 
 function createRace(player_id, track_id) {

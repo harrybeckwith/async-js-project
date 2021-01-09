@@ -16,13 +16,11 @@ document.addEventListener("DOMContentLoaded", function () {
 async function onPageLoad() {
   try {
     getTracks().then((tracks) => {
-      console.log("getTracks", tracks);
       const html = renderTrackCards(tracks);
       renderAt("#tracks", html);
     });
 
     getRacers().then((racers) => {
-      console.log("getRacers", racers);
       const html = renderRacerCars(racers);
       renderAt("#racers", html);
     });
@@ -151,8 +149,6 @@ async function runCountdown() {
 }
 
 function handleSelectPodRacer(target) {
-  console.log("selected a pod", target.id);
-
   // remove class selected from all racer options
   const selected = document.querySelector("#racers .selected");
   if (selected) {
@@ -167,8 +163,6 @@ function handleSelectPodRacer(target) {
 }
 
 function handleSelectTrack(target) {
-  console.log("selected a track", target.id);
-
   // remove class selected from all track options
   const selected = document.querySelector("#tracks .selected");
   if (selected) {
@@ -183,7 +177,6 @@ function handleSelectTrack(target) {
 }
 
 function handleAccelerate() {
-  console.log("accelerate button clicked");
   // Invoke the API call to accelerate
   accelerate(store.race_id);
 }
@@ -288,23 +281,23 @@ function resultsView(positions) {
 }
 
 function raceProgress(positions) {
-  console.log("positions", positions);
-  console.log(store);
   let userPlayer = positions.find((e) => e.id === store.player_id);
-  userPlayer.driver_name = " (you)";
+  userPlayer.driver_name = "Racer " + store.player_id + " (you)";
 
   positions = positions.sort((a, b) => (a.segment > b.segment ? -1 : 1));
   let count = 1;
 
-  const results = positions.map((p) => {
-    return `
+  const results = positions
+    .map((p) => {
+      return `
 			<tr>
 				<td>
 					<h3>${count++} - ${p.driver_name}</h3>
 				</td>
 			</tr>
 		`;
-  });
+    })
+    .join(" ");
 
   return `
 		<main>
